@@ -2,9 +2,22 @@ package org.example.parking.models;
 
 import org.example.parking.enums.VehicleType;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "vehicles")
 public class Vehicle {
+
+    @Id
+    @Column(name = "license_plate", nullable = false, length = 50)
     private String licensePlate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "vehicle_type", nullable = false, length = 20)
     private VehicleType vehicleType;
+
+    public Vehicle() {
+    }
 
     public Vehicle(String licensePlate, VehicleType vehicleType) {
         this.licensePlate = licensePlate;
