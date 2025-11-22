@@ -20,8 +20,6 @@ public class ParkingCLIRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        scanner = new Scanner(System.in);
-
         System.out.println("\n╔═══════════════════════════════════════════════════════════════╗");
         System.out.println("║        PARKING LOT MANAGEMENT SYSTEM - Spring Boot           ║");
         System.out.println("║                                                               ║");
@@ -29,6 +27,28 @@ public class ParkingCLIRunner implements CommandLineRunner {
         System.out.println("║  H2 Console: http://localhost:8080/h2-console                ║");
         System.out.println("║  JDBC URL: jdbc:h2:mem:parkingdb                             ║");
         System.out.println("╚═══════════════════════════════════════════════════════════════╝\n");
+
+        // Check if stdin is available
+        try {
+            if (System.console() == null && System.in.available() == 0) {
+                System.out.println("CLI mode disabled (no interactive console). REST API is running...");
+                System.out.println("Press Ctrl+C to stop the application.\n");
+                // Keep the application running
+                Thread.currentThread().join();
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println("CLI mode disabled. REST API is running...");
+            System.out.println("Press Ctrl+C to stop the application.\n");
+            try {
+                Thread.currentThread().join();
+            } catch (InterruptedException ie) {
+                // Application is shutting down
+            }
+            return;
+        }
+
+        scanner = new Scanner(System.in);
 
         // Ask if user wants CLI or just REST API
         System.out.print("Start Interactive CLI? (y/n): ");
